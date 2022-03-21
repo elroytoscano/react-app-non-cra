@@ -4,7 +4,18 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: './app/index.js',
-
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
+    ],
+  },
+  resolve: {
+    extensions: ['*', '.js', '.jsx'],
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
 
@@ -13,7 +24,7 @@ module.exports = {
 
   module: {
     rules: [
-      { test: /\.(js)$/, use: 'babel-loader' },
+      { test: /\.(js|jsx)$/, use: 'babel-loader' },
 
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
     ],
