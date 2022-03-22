@@ -1,30 +1,79 @@
-import { useState } from 'react';
+import cardArray from './cardArray';
+import { useState, useEffect, useCallback } from 'react';
 
 const useCards = () => {
-  const [flip, setFlip] = useState(false);
-  const flippedCards = [];
-  let firstCard, secondCard;
-  let hasFlippedCards = false;
+  const [firstCard, setFirstCard] = useState({});
+  const [secondCard, setSecondCard] = useState({});
+  const [cards, setCards] = useState([]);
 
-  const cardClick = (id, name) => {
-    if (!firstCard) {
-      firstCard = { id, name };
-      hasFlippedCards = true;
-      return;
-    }
-    secondCard = { id, name };
-    if (hasFlippedCards) {
-      if (firstCard.name === secondCard.name) {
-        console.log('match');
+  const randomize = useCallback(() =>
+    cardArray.sort(() => Math.random() - 0.7)
+  );
+
+  useEffect(() => {
+    randomize();
+  }, []);
+
+  useEffect(() => {
+    setCards(cardArray);
+  }, [randomize]);
+
+  useEffect(() => {
+    if (
+      Object.values(firstCard).length > 0 &&
+      Object.values(secondCard).length > 0
+    ) {
+      if (firstCard?.name === secondCard?.name) {
+        setFirstCard({});
+        setSecondCard({});
       } else {
-        console.log('unmatch');
+        setTimeout(() => {
+          firstCard.flipped = false;
+          setFirstCard(firstCard);
+          // const firstTemp = { ...firstCard, flipped: false };
+          // setFirstCard(firstTemp);
+          secondCard.flipped = false;
+          setSecondCard(secondCard);
+          setFirstCard({});
+          setSecondCard({});
+        }, 1000);
       }
+    }
+  }, [firstCard, secondCard]);
+
+  const cardClick = (card) => {
+    if (Object.values(firstCard).length === 0) {
+      card.flipped = true;
+      setFirstCard(card);
+    } else if (firstCard?.id === card.id) {
+      firstCard.flipped = false;
+      setFirstCard(firstCard);
+      // setFirstCard({ ...firstCard, flipped: false });
+      setFirstCard({});
+    } else if (
+      Object.values(firstCard).length > 0 &&
+      Object.values(secondCard).length === 0
+    ) {
+      card.flipped = true;
+      setSecondCard(card);
+    } else if (
+      Object.values(firstCard).length > 0 &&
+      Object.values(secondCard).length > 0
+    ) {
+      return;
     }
   };
 
-  const flipCard = () => setFlip(!flip);
+  const resetGrid = () => {
+    setFirstCard({});
+    setSecondCard({});
+    cards.forEach((card) => {
+      if (card.flipped) card.flipped = false;
+    });
+    randomize();
+  };
 
-  return { cardClick, flipCard };
+  return { resetGrid, cardClick, cards };
 };
 
 export default useCards;
