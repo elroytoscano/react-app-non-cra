@@ -63,13 +63,13 @@ const GameContainer = () => {
   };
 
   const resetGrid = () => {
-    setFirstCard({});
-    setSecondCard({});
     cards.forEach((card) => {
       if (card.flipped) card.flipped = false;
     });
-    setCards(cards);
+    setCards([]);
     randomize();
+    setFirstCard({});
+    setSecondCard({});
     setCards(cards);
   };
 
