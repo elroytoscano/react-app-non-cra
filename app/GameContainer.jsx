@@ -5,6 +5,7 @@ import useCards from './useCards';
 
 const GameContainer = () => {
   const { cardClick, cards, resetGrid } = useCards();
+
   return (
     <>
       <div className='container'>
@@ -22,12 +23,7 @@ const GameContainer = () => {
           })}
       </div>
       <div style={{ textAlign: 'center' }}>
-        <button
-          className='reset'
-          onClick={() => {
-            resetGrid();
-          }}
-        >
+        <button className='reset' onClick={resetGrid}>
           Reset
         </button>
       </div>
