@@ -54,7 +54,6 @@ const GameContainer = () => {
     ) {
       card.flipped = true;
       setSecondCard(card);
-      hasFlippedCards = true;
     } else if (
       Object.values(firstCard).length > 0 &&
       Object.values(secondCard).length > 0
